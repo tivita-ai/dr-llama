@@ -58,24 +58,24 @@ python scripts/init_milvus.py
 ```
 dr-llama/
 ├── app/
-│   ├── api/          # API routes and endpoints
-│   ├── data/         # Data processing and services
-│   │   ├── processors/  # Document processors
-│   │   ├── services/    # Business logic services
-│   │   └── vector_store/ # Vector database integration
-│   └── utils/        # Utility functions
-├── data/            # Data storage and resources
-├── scripts/         # Utility scripts
-│   ├── data/        # Data processing scripts
-│   └── output/      # Script output directory
-├── tests/           # Test files
-├── volumes/         # Docker volumes
-│   ├── etcd/        # Milvus etcd data
-│   ├── minio/       # Milvus minio data
-│   └── milvus/      # Milvus data
-├── docker-compose.yml  # Milvus services configuration
-├── pyproject.toml   # Project dependencies and metadata
-└── poetry.lock      # Lock file for dependencies
+│   ├── api/                  # API routes and endpoints
+│   ├── data/                 # Data processing and services
+│   │   ├── processors/       # Document processors
+│   │   ├── services/         # Business logic services
+│   │   └── vector_store/     # Vector database integration
+│   └── utils/                # Utility functions
+├── data/                     # Data storage and resources
+├── scripts/                  # Utility scripts
+│   ├── data/                 # Data processing scripts
+│   └── output/               # Script output directory
+├── tests/                    # Test files
+├── volumes/                  # Docker volumes
+│   ├── etcd/                 # Milvus etcd data
+│   ├── minio/                # Milvus minio data
+│   └── milvus/               # Milvus data
+├── docker-compose.yml        # Milvus services configuration
+├── pyproject.toml            # Project dependencies and metadata
+└── poetry.lock               # Lock file for dependencies
 ```
 
 ## Development
