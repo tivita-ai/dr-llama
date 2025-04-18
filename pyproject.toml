@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "dr-llama"
+version = "0.1.0"
+description = "Tivita LLM-based model project"
+authors = ["Vitor Toledo <pr.vitortoledo@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "~3.13"
+pydantic = "^2.11.3"
+pydantic-settings = "^2.9.0"
+fastapi = "^0.115.12"
+ruff = "^0.11.6"
+pymilvus = "^2.5.6"
+sentence-transformers = "^4.1.0"
+prometheus-client = "^0.21.1"
+uvicorn = "^0.34.1"
+datasets = "^3.5.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "~8.0.0"
+pytest-asyncio = "~0.23.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+lint.select = [
+    "E",  # pycodestyle errors
+    "F",  # pyflakes
+    "I",  # isort
+    "N",  # pep8-naming
+    "W",  # pycodestyle warnings
+    "UP", # pyupgrade
+]
+lint.ignore = [
+    "E501",  # line too long (handled by black)
+    "N802",  # function name should be lowercase
+    "N803",  # argument name should be lowercase
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+
