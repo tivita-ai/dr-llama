@@ -4,11 +4,11 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 
-from app.data.processors.document_processor import DocumentProcessor
-from app.data.services.document_service import DocumentService
-from app.data.vector_store.config import VectorDBConfig
-from app.data.vector_store.service import VectorDBService
-from app.utils.metrics import metrics
+from dr_llama.data.processors.document_processor import DocumentProcessor
+from dr_llama.data.services.document_service import DocumentService
+from dr_llama.data.vectors.config import VectorDBConfig
+from dr_llama.data.vectors.service import VectorDBService
+from dr_llama.utils.metrics import metrics
 
 router = APIRouter(prefix="/api/v1/documents", tags=["documents"])
 
@@ -98,7 +98,9 @@ async def create_document(
     document_service: DocumentService = Depends(get_document_service),
 ) -> DocumentResponse:
     try:
-        result = await document_service.ingest_document(text=document.text, metadata=document.metadata.dict())
+        result = await document_service.ingest_document(
+            text=document.text, metadata=document.metadata.dict()
+        )
         return DocumentResponse(**result)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
@@ -136,7 +138,9 @@ async def update_document(
         )
         return {"status": "success"}
     except Exception as exc:
-        raise HTTPException(status_code=500, detail="Failed to update document") from exc
+        raise HTTPException(
+            status_code=500, detail="Failed to update document"
+        ) from exc
 
 
 @router.delete("/{document_id}")
@@ -149,7 +153,9 @@ async def delete_document(
         await document_service.delete_document([document_id])
         return {"status": "success"}
     except Exception as exc:
-        raise HTTPException(status_code=500, detail="Failed to delete document") from exc
+        raise HTTPException(
+            status_code=500, detail="Failed to delete document"
+        ) from exc
 
 
 @router.get("/stats")
@@ -160,4 +166,6 @@ async def get_stats(
     try:
         return await document_service.get_database_stats()
     except Exception as exc:
-        raise HTTPException(status_code=500, detail="Failed to get database stats") from exc
+        raise HTTPException(
+            status_code=500, detail="Failed to get database stats"
+        ) from exc

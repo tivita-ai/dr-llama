@@ -1,8 +1,8 @@
 import re
 from typing import Any, Dict, List, Optional
 
-from app.utils.logger import get_logger
-from app.utils.metrics import metrics
+from src.utils.logger import get_logger
+from src.utils.metrics import metrics
 
 logger = get_logger(__name__)
 
@@ -10,14 +10,18 @@ logger = get_logger(__name__)
 class DocumentProcessor:
     def __init__(self):
         self.phi_patterns = [
-            r"\d{3}-\d{2}-\d{4}",  # SSN
-            r"\d{3}/\d{3}/\d{4}",  # Date of birth
-            r"[A-Z]\d{8}",  # Medical record number
-            r"\d{10}",  # Phone numbers
+            r"\d{3}-\d{2}-\d{4}",   # SSN
+            r"\d{3}/\d{3}/\d{4}",   # Date of birth
+            r"[A-Z]\d{8}",          # Medical record number
+            r"\d{10}",              # Phone numbers
         ]
 
     @metrics.track_request("document_processing")
-    async def process_document(self, text: str, metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    async def process_document(
+        self,
+        text: str,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
         try:
             processed_text = self._remove_phi(text)
             chunks = self.chunk_text(processed_text)
@@ -40,7 +44,12 @@ class DocumentProcessor:
             text = re.sub(pattern, "[REDACTED]", text)
         return text
 
-    def chunk_text(self, text: str, max_chunk_size: int = 1000, overlap: int = 100) -> List[str]:
+    def chunk_text(
+        self,
+        text: str,
+        max_chunk_size: int = 1000,
+        overlap: int = 100,
+    ) -> List[str]:
         chunks = []
         current_pos = 0
 
@@ -61,7 +70,10 @@ class DocumentProcessor:
 
         return chunks
 
-    def process_metadata(self, metadata: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    def process_metadata(
+        self,
+        metadata: Optional[Dict[str, Any]],
+    ) -> Dict[str, Any]:
         if not metadata:
             return {}
 
@@ -75,9 +87,16 @@ class DocumentProcessor:
         return processed
 
     @metrics.track_request("document_validation")
-    async def validate_document(self, text: str, metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    async def validate_document(
+        self,
+        text: str,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
         try:
-            phi_count = sum(len(re.findall(pattern, text)) for pattern in self.phi_patterns)
+            phi_count = sum(
+                len(re.findall(pattern, text))
+                for pattern in self.phi_patterns
+            )
 
             return {
                 "has_phi": phi_count > 0,

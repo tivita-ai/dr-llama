@@ -3,8 +3,8 @@ from typing import Any, Dict, List, Optional
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from app.utils.logger import get_logger
-from models.model_config import InferenceConfig, ModelConfig
+from src.utils.logger import get_logger
+from src.models.model_config import InferenceConfig, ModelConfig
 
 logger = get_logger(__name__)
 
@@ -17,7 +17,9 @@ class BaseModel:
     ):
         self.model_config = model_config
         self.inference_config = inference_config
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device(
+            "cuda" if torch.cuda.is_available() else "cpu",
+        )
 
         self._load_model()
         self._load_tokenizer()
@@ -47,7 +49,12 @@ class BaseModel:
             raise
 
     @torch.inference_mode()
-    def generate(self, prompt: str, max_new_tokens: Optional[int] = None, **kwargs) -> List[str]:
+    def generate(
+        self,
+        prompt: str,
+        max_new_tokens: Optional[int] = None,
+        **kwargs,
+    ) -> List[str]:
         try:
             inputs = self.tokenizer(
                 prompt,
@@ -64,7 +71,10 @@ class BaseModel:
 
             outputs = self.model.generate(**inputs, **generate_config)
 
-            return self.tokenizer.batch_decode(outputs, skip_special_tokens=True)
+            return self.tokenizer.batch_decode(
+                outputs,
+                skip_special_tokens=True,
+            )
 
         except Exception as e:
             logger.error("Generation failed: %s", e)

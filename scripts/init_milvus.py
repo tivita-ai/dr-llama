@@ -1,8 +1,10 @@
-from app.data.vector_store.config import VectorDBConfig
-from app.data.vector_store.service import VectorDBService
+from src.data.vectors.config import VectorDBConfig
+from src.data.vectors.service import VectorDBService
 
 
 def init_milvus():
+    print("Initializing Milvus...")
+
     config = VectorDBConfig()
     vector_db = VectorDBService(config)
 

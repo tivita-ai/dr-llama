@@ -1,10 +1,10 @@
 import uuid
 from typing import Any, Dict, List, Optional
 
-from app.data.processors.document_processor import DocumentProcessor
-from app.data.vector_store.service import VectorDBService
-from app.utils.logger import get_logger
-from app.utils.metrics import metrics
+from src.data.processors.document_processor import DocumentProcessor
+from src.data.vectors.service import VectorDBService
+from src.utils.logger import get_logger
+from src.utils.metrics import metrics
 
 logger = get_logger(__name__)
 
@@ -19,7 +19,11 @@ class DocumentService:
         self.processor = processor
 
     @metrics.track_request("document_ingestion")
-    async def ingest_document(self, text: str, metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    async def ingest_document(
+        self,
+        text: str,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
         try:
             # Validate document first
             validation = await self.processor.validate_document(text, metadata)
@@ -67,7 +71,8 @@ class DocumentService:
                 {
                     "content": result["document"],
                     "metadata": result["metadata"],
-                    "relevance": 1 - result["distance"],  # Convert distance to similarity
+                    # Convert distance to similarity
+                    "relevance": 1 - result["distance"],
                 }
                 for result in results
             ]
@@ -84,15 +89,23 @@ class DocumentService:
     ):
         try:
             if text:
-                processed = await self.processor.process_document(text=text, metadata=metadata)
+                processed = await self.processor.process_document(
+                    text=text,
+                    metadata=metadata,
+                )
                 await self.vector_db.update_document(
                     document_id=document_id,
-                    document=(processed["chunks"][0] if processed["chunks"] else None),
+                    document=(
+                        processed["chunks"][0] if processed["chunks"] else None
+                    ),
                     metadata=processed["metadata"],
                 )
             elif metadata:
                 processed_metadata = self.processor.process_metadata(metadata)
-                await self.vector_db.update_document(document_id=document_id, metadata=processed_metadata)
+                await self.vector_db.update_document(
+                    document_id=document_id,
+                    metadata=processed_metadata,
+                )
         except Exception as e:
             logger.error("Document update failed: %s", e)
             raise

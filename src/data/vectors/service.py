@@ -10,13 +10,15 @@ from pymilvus import (
 )
 from sentence_transformers import SentenceTransformer
 
-from app.data.vector_store.config import VectorDBConfig
+from src.data.vectors.config import VectorDBConfig
 
 
 class VectorDBService:
     def __init__(self, config: VectorDBConfig):
         self.config = config
-        self.embedding_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+        self.embedding_model = SentenceTransformer(
+            "sentence-transformers/all-MiniLM-L6-v2",
+        )
         self._connect()
         self._setup_collection()
 

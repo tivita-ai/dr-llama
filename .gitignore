@@ -168,3 +168,6 @@ app/llama_index_server/documents/*.jsonl
 */.idea/
 
 .envrc
+
+# Milvus volumes
+volumes/

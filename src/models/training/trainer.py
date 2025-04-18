@@ -9,10 +9,10 @@ from transformers import (
     TrainingArguments,
 )
 
-from models.document import Document
+from src.models.document import Document
 
 
-class DocumentTrainer:
+class ModelTrainer:
     def __init__(
         self,
         model_name: str = "meta-llama/Llama-2-7b-hf",
@@ -28,7 +28,11 @@ class DocumentTrainer:
         self.num_epochs = num_epochs
 
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
-        self.model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16, device_map="auto")
+        self.model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            torch_dtype=torch.float16,
+            device_map="auto",
+        )
 
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
@@ -52,7 +56,11 @@ class DocumentTrainer:
             )
 
         dataset = Dataset.from_dict({"text": texts})
-        tokenized_dataset = dataset.map(tokenize_function, batched=True, remove_columns=["text"])
+        tokenized_dataset = dataset.map(
+            tokenize_function,
+            batched=True,
+            remove_columns=["text"],
+        )
 
         return tokenized_dataset
 

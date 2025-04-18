@@ -7,7 +7,6 @@ def setup_development_environment():
 
     # Create necessary directories
     directories = [
-        "data/vector_store",
         "volumes/etcd",
         "volumes/minio",
         "volumes/milvus",
@@ -23,12 +22,8 @@ def setup_development_environment():
     print("\nStarting Milvus services...")
     subprocess.run(["docker-compose", "up", "-d"], check=True)
 
-    # Install dependencies
-    print("\nInstalling dependencies...")
-    subprocess.run(["poetry", "install"], check=True)
-
     # Initialize Milvus
-    print("\nInitializing Milvus...")
+    print("\nRunning init_milvus.py...")
     subprocess.run(["python", "scripts/init_milvus.py"], check=True)
 
     print("\nDevelopment environment setup complete!")

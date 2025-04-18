@@ -1,38 +1,26 @@
-import json
 from pathlib import Path
 
-from models.document import Document
-from models.training.trainer import DocumentTrainer
+from src.models.training.trainer import ModelTrainer
 
 
-def load_documents(directory: str) -> list[Document]:
-    documents = []
-    for file_path in Path(directory).glob("*.txt"):
-        with open(file_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-            document = Document(**data)
-            documents.append(document)
-    return documents
+def train_model():
+    print("Starting model training...")
 
+    # Initialize trainer
+    trainer = ModelTrainer()
 
-def main():
-    documents = load_documents("scripts/data/documents")
+    # Load training data
+    data_path = Path("scripts/data/documents")
+    if not data_path.exists():
+        raise FileNotFoundError(
+            f"Training data directory not found: {data_path}",
+        )
 
-    trainer = DocumentTrainer(
-        model_name="meta-llama/Llama-2-7b-hf",
-        max_length=2048,
-        batch_size=4,
-        learning_rate=2e-5,
-        num_epochs=3,
-    )
+    # Train model
+    trainer.train(data_path)
 
-    trainer.train(
-        documents=documents,
-        output_dir="scripts/output",
-        save_steps=500,
-        logging_steps=100,
-    )
+    print("Model training completed successfully!")
 
 
 if __name__ == "__main__":
-    main()
+    train_model()

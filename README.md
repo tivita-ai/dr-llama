@@ -64,15 +64,13 @@ dr-llama/
 │   │   ├── services/         # Business logic services
 │   │   └── vector_store/     # Vector database integration
 │   └── utils/                # Utility functions
-├── data/                     # Data storage and resources
+├── models/                   # Models configuration
+│   ├── inference/            # LLM BaseModel text generator
+│   └── trainning/            # Trainning config for model
 ├── scripts/                  # Utility scripts
-│   ├── data/                 # Data processing scripts
+│   ├── data/                 # Data processing scripts for trainning
 │   └── output/               # Script output directory
 ├── tests/                    # Test files
-├── volumes/                  # Docker volumes
-│   ├── etcd/                 # Milvus etcd data
-│   ├── minio/                # Milvus minio data
-│   └── milvus/               # Milvus data
 ├── docker-compose.yml        # Milvus services configuration
 ├── pyproject.toml            # Project dependencies and metadata
 └── poetry.lock               # Lock file for dependencies

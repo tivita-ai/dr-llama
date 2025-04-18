@@ -19,7 +19,9 @@ def get_logger(
 
     logger.setLevel(log_level)
 
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    )
 
     # Console handler
     console_handler = logging.StreamHandler(sys.stdout)
@@ -28,7 +30,11 @@ def get_logger(
 
     # File handler (if log_file is provided)
     if log_file:
-        file_handler = RotatingFileHandler(log_file, maxBytes=max_bytes, backupCount=backup_count)
+        file_handler = RotatingFileHandler(
+            log_file,
+            maxBytes=max_bytes,
+            backupCount=backup_count,
+        )
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
 
